@@ -1,10 +1,6 @@
 {
   "global": {
-    "powered_by_geocorp": "Powered by GeoCorp",
-    "appTitle": "Pyrometry Measurement System",
-    "email": "Email Address",
-    "password": "Password",
-    "login": "Login",
+    "cal_burned": "Calories Burned",
     "and": "and",
     "confirm": "Confirm",
     "goBack": "Go Back",
