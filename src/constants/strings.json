@@ -1,0 +1,16 @@
+{
+  "global": {
+    "powered_by_geocorp": "Powered by GeoCorp",
+    "appTitle": "Pyrometry Measurement System",
+    "email": "Email Address",
+    "password": "Password",
+    "login": "Login",
+    "and": "and",
+    "confirm": "Confirm",
+    "goBack": "Go Back",
+    "gotIt": "Got it",
+    "or": "OR",
+    "close": "Close",
+    "ok": "OK"
+  }
+}
