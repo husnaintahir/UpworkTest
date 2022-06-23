@@ -1,5 +1,5 @@
 import axios from "axios";
 
 export const api = axios.create({
-    baseURL: "<any-url-here>" 
+    baseURL: "https://postman-echo.com" 
 });

@@ -1,29 +1,51 @@
 import React from 'react'
-import { TouchableOpacity, Text, Image, StyleSheet } from 'react-native'
+import { TouchableOpacity, Text, Image, StyleSheet, View } from 'react-native'
 import { fonts, fontWeights } from '../../helpers/FontNames'
 
 import { Sizing } from '../../helpers/Sizing'
+import Spinner from '../Spinner'
 
-export default function Calories({ label, subLabel, iconSrc, onPress }) {
+export default function Calories({
+    label,
+    subLabel,
+    iconSrc,
+    onPress,
+    loading = false,
+    spinColor = "#f5794b"
+}) {
     return (
         <TouchableOpacity
             style={styles.btn}
             disabled={onPress ? false : true}
             onPress={onPress}
         >
-
-            <Image
-                source={iconSrc}
-                style={styles.icon}
-                resizeMode="contain"
-            />
-            <Text
-                style={styles.label}
+            <View
+                style={{
+                    flexDirection: "row",
+                    alignItems: "center"
+                }}
             >
-                {label}
-                <Text style={styles.subLabel} >{`\n${subLabel}`}</Text>
+                <Image
+                    source={iconSrc}
+                    style={styles.icon}
+                    resizeMode="contain"
+                />
+                <Text
+                    style={styles.label}
+                >
+                    {label}
+                    <Text style={styles.subLabel} >{`\n${subLabel}`}</Text>
 
-            </Text>
+                </Text>
+            </View>
+
+
+            {
+                loading
+                &&
+                <Spinner color={spinColor} size="large" />
+            }
+
 
         </TouchableOpacity>
     )
@@ -37,7 +59,8 @@ const styles = StyleSheet.create({
         paddingVertical: Sizing(8),
         paddingHorizontal: Sizing(15),
         flexDirection: "row",
-        alignItems: "center"
+        alignItems: "center",
+        justifyContent: "space-between"
     },
     icon: {
         width: Sizing(40),

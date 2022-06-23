@@ -4,10 +4,13 @@ import {
     SafeAreaView,
     StyleSheet,
     StatusBar,
-    Dimensions
+    Dimensions,
+    Text,
+    ScrollView
 } from "react-native";
 import { useTheme } from '@react-navigation/native';
 import { BarChart } from "react-native-gifted-charts";
+import Modal from "react-native-modal"
 
 import Header from '../components/Header';
 import { Divider } from '../components/Divider';
@@ -25,6 +28,7 @@ import { MasterStyles } from '../styles/MasterStyle';
 
 import { global } from "../constants/strings.json"
 import { Images } from '../../assets/images/icons';
+import AppButton from '../components/Buttons/AppButton';
 
 
 const screenWidth = Dimensions.get("window").width - Sizing(32);
@@ -36,73 +40,117 @@ export default function Home() {
     const { colors } = useTheme();
 
     const [chartData, inActiveCals, workoutCals] = useCalories();
+    const [apiData, setApiData] = React.useState();
+    const [popupVisibility, setPopupVisibility] = React.useState();
+    const [loading, setLoading] = React.useState(false);
 
 
     const makeApiCall = async () => {
-        const data = await api.post('/login', {
-            login: "1244",
-            password: "password"
-        })
+        setLoading(true)
+        const data = await api.get('/get?foo1=bar1&foo2=bar2')
             .then(r => r.data)
             .catch(error => {
                 console.log(">>>>> error", error)
             })
 
+        setLoading(false)
+        setApiData(data);
+        setPopupVisibility(true);
+
     }
 
+    const DataModal = () => {
+        return (
+            <Modal
+                isVisible={popupVisibility}
+                style={{ justifyContent: 'flex-end', margin: 0, }}
+            >
+                <View
+                    style={{
+                        flex: 0.5,
+                        backgroundColor: 'white',
+                        justifyContent: 'space-around',
+                        alignItems: 'center',
+                        padding: Sizing(12)
+                    }}
+                >
+                    <Text>
+                        {JSON.stringify(apiData)}
+                    </Text>
+
+                    <AppButton
+                        text="Close"
+                        onPress={() => {
+                            setPopupVisibility(false)
+                        }}
+                    />
+
+                </View>
+
+            </Modal>
+        )
+    }
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: colors.primary }} >
             <StatusBar barStyle={"default"} backgroundColor={colors.primary} />
+            <ScrollView contentContainerStyle={{ flex: 1, backgroundColor: colors.background }} >
+                <>
+                    <Header screenTitle={global.cal_burned} />
 
-            <Header screenTitle={global.cal_burned} />
+                    <View
+                        style={[
+                            MasterStyles.masterContainer,
+                            styles.container,
+                        ]}
+                    >
 
-            <View style={[
-                MasterStyles.masterContainer,
-                styles.container,
-                { backgroundColor: colors.background }
-            ]} >
+                        {
+                            chartData ?
+                                <>
+                                    <BarChart
+                                        width={screenWidth}
+                                        noOfSections={4}
+                                        stackData={chartData}
+                                        barWidth={30}
+                                        spacing={15}
+                                        height={300}
+                                    />
 
+                                    <Divider marginTop={70} />
 
-                {
-                    chartData ?
-                        <>
-                            <BarChart
-                                width={screenWidth}
-                                noOfSections={4}
-                                stackData={chartData}
-                                barWidth={30}
-                                spacing={15}
-                                height={300}
-                            />
+                                    <Border />
 
-                            <Divider marginTop={70} />
+                                    <Divider marginTop={50} />
 
-                            <Border />
+                                    <Calories
+                                        label={global.in_active_cals_burned}
+                                        subLabel={`${Math.round(inActiveCals)} ${global.bpm}`}
+                                        iconSrc={Images.inActive}
+                                        onPress={makeApiCall}
+                                        loading={loading}
+                                    />
 
-                            <Divider marginTop={50} />
+                                    <Divider marginTop={14} />
 
-                            <Calories
-                                label={global.in_active_cals_burned}
-                                subLabel={`${Math.round(inActiveCals)} ${global.bpm}`}
-                                iconSrc={Images.inActive}
-                            />
+                                    <Calories
+                                        label={global.workout_cals_burned}
+                                        subLabel={`${Math.round(workoutCals)}`}
+                                        iconSrc={Images.workout}
+                                        onPress={makeApiCall}
+                                        loading={loading}
+                                        spinColor={colors.primary}
+                                    />
+                                </>
+                                :
+                                <Spinner />
+                        }
 
-                            <Divider marginTop={14} />
+                    </View>
+                </>
+            </ScrollView>
 
-                            <Calories
-                                label={global.workout_cals_burned}
-                                subLabel={`${Math.round(workoutCals)}`}
-                                iconSrc={Images.workout}
-                                onPress={makeApiCall}
-                            />
-                        </>
-                        :
-                        <Spinner />
-                }
-
-            </View>
-
+            {DataModal()}
 
         </SafeAreaView>
     );

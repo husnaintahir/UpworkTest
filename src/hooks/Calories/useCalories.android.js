@@ -30,7 +30,7 @@ export const useCalories = () => {
 
         const isAuthorized = GoogleFit.isAuthorized
 
-        console.log("isAuthorized", isAuthorized);
+        // console.log("isAuthorized", isAuthorized);
 
         if (isAuthorized) {
             getCaloriesData()
@@ -80,7 +80,7 @@ export const useCalories = () => {
 
 
         const cals = await GoogleFit.getDailyCalorieSamples(startEnd);
-        console.log(">>>>>> ", cals)
+        // console.log(">>>>>> ", cals)
 
 
 
