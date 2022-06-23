@@ -1,12 +1,8 @@
 {
   "global": {
     "cal_burned": "Calories Burned",
-    "and": "and",
-    "confirm": "Confirm",
-    "goBack": "Go Back",
-    "gotIt": "Got it",
-    "or": "OR",
-    "close": "Close",
-    "ok": "OK"
+    "in_active_cals_burned": "In-Active Calories Burned",
+    "workout_cals_burned": "Workout Calories Burned",
+    "bpm": "BPM"
   }
 }
