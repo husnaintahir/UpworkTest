@@ -32,18 +32,19 @@ import AppButton from '../components/Buttons/AppButton';
 
 
 const screenWidth = Dimensions.get("window").width - Sizing(32);
-
+const NO_OF_SECTION = 4
 
 
 export default function Home() {
 
     const { colors } = useTheme();
 
-    const [chartData, inActiveCals, workoutCals] = useCalories();
+    const [chartData, inActiveCals, workoutCals, maxCals] = useCalories();
     const [apiData, setApiData] = React.useState();
     const [popupVisibility, setPopupVisibility] = React.useState();
     const [loading, setLoading] = React.useState(false);
 
+    const stepValue = Math.ceil(maxCals / (NO_OF_SECTION * 100)) * 100;
 
     const makeApiCall = async () => {
         setLoading(true)
@@ -110,18 +111,30 @@ export default function Home() {
                                 <>
                                     <BarChart
                                         width={screenWidth}
-                                        noOfSections={4}
                                         stackData={chartData}
-                                        barWidth={30}
-                                        spacing={15}
-                                        height={300}
+                                        barWidth={Sizing(18)}
+                                        spacing={25}
+                                        height={Sizing(300)}
+                                        disableScroll={true}
+                                        rulesColor={"#ddd"}
+                                        xAxisColor={"#ddd"}
+                                        yAxisColor={"#ddd"}
+                                        dashGap={0}
+                                        xAxisLabelTextStyle={styles.axisLabelStyle}
+                                        yAxisTextStyle={styles.axisLabelStyle}
+
+                                        noOfSections={NO_OF_SECTION}
+                                        stepValue={stepValue}
+                                        maxValue={stepValue * NO_OF_SECTION}
+
+
                                     />
 
-                                    <Divider marginTop={70} />
+                                    <Divider marginTop={Sizing(70)} />
 
                                     <Border />
 
-                                    <Divider marginTop={50} />
+                                    <Divider marginTop={Sizing(50)} />
 
                                     <Calories
                                         label={global.in_active_cals_burned}
@@ -131,7 +144,7 @@ export default function Home() {
                                         loading={loading}
                                     />
 
-                                    <Divider marginTop={14} />
+                                    <Divider marginTop={Sizing(14)} />
 
                                     <Calories
                                         label={global.workout_cals_burned}
@@ -160,4 +173,5 @@ const styles = StyleSheet.create({
     container: {
         flex: 1
     },
+    axisLabelStyle: { color: "#8d9397", fontSize: Sizing(11) }
 })
