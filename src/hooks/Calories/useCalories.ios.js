@@ -21,6 +21,7 @@ export const useCalories = () => {
     const [chartData, setChartData] = useState(null);
     const [inActiveCals, setInactiveCals] = useState();
     const [workoutCals, setWorkoutCals] = useState();
+    const [maxCals, setMaxCals] = useState(0);
 
     useEffect(() => {
         checkHealthKitAvailability()
@@ -65,9 +66,12 @@ export const useCalories = () => {
 
             let inActiveCalsCount = 0;
             let activeCalsCount = 0;
+            let maxCalCount = 0;
 
             for (let i = 1; i <= 7; i++) {
 
+
+                let _maxCals = 0;
 
                 const label = weekStart.format("ddd")
                 const stacks = [];
@@ -83,6 +87,8 @@ export const useCalories = () => {
                 })
 
                 if (availableBasal) {
+
+                    _maxCals = _maxCals + availableBasal.quantity;
 
                     inActiveCalsCount = inActiveCalsCount + availableBasal.quantity
 
@@ -110,6 +116,8 @@ export const useCalories = () => {
                 }
 
                 if (availableActive) {
+
+                    _maxCals = _maxCals + availableActive.quantity;
 
                     activeCalsCount = activeCalsCount + availableActive.quantity
 
@@ -145,14 +153,18 @@ export const useCalories = () => {
                 })
 
                 weekStart.add(1, "day")
+                if (_maxCals > maxCalCount) {
+                    maxCalCount = _maxCals
+                }
 
             }
 
             setChartData(createChartData);
             setInactiveCals(inActiveCalsCount);
             setWorkoutCals(activeCalsCount)
+            setMaxCals(maxCalCount);
         }
     }
 
-    return [chartData, inActiveCals, workoutCals];
+    return [chartData, inActiveCals, workoutCals, maxCals];
 };
